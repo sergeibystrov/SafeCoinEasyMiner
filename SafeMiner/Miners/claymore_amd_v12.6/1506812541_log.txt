@@ -1,0 +1,13 @@
+02:02:21:857	3d84	args: -zpool stratum+tcp://pcmining.xyz:3857 -zwal t1MywcSf3CjjzZbxKwL15j1akhfe7r5mdHq -zpsw x 
+02:02:21:860	3d84	
+02:02:21:863	3d84	ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+02:02:21:864	3d84	บ             Claymore's ZCash AMD GPU Miner v12.6               บ
+02:02:21:865	3d84	ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+02:02:21:867	3d84	
+02:02:22:070	3d84	ZEC: 1 pool is specified
+02:02:22:072	3d84	Main ZCash pool is pcmining.xyz:3857
+02:02:22:617	3d84	OpenCL platform: NVIDIA CUDA
+02:02:22:618	3d84	OpenCL platform: Intel(R) OpenCL
+02:02:22:619	3d84	OpenCL platform: AMD Accelerated Parallel Processing
+02:02:22:622	3d84	No AMD cards in the list.
+02:02:22:623	3d84	No AMD OPENCLGPUs found, exit

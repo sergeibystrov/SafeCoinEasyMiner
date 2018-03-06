@@ -49,8 +49,11 @@ namespace SafeMiner
                 StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + "\\settings.txt");
                 string line = sr.ReadLine();
                 sr.Close();
-                walletAddressTextBox.Text = line.Split(' ')[0];
-                SelectPoolComboBox.SelectedIndex = int.Parse(line.Split(' ')[1]);
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    walletAddressTextBox.Text = line.Split(' ')[0];
+                    SelectPoolComboBox.SelectedIndex = int.Parse(line.Split(' ')[1]);
+                }
             }
 
         }
