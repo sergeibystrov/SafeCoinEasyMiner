@@ -13,6 +13,7 @@ namespace SafeMiner.Models
         public string uri { get; set; }
         public string port { get; set; }
         public string fee { get; set; }
+        public string WorkerPage { get; set; }
 
         public static List<MiningPool> Get() //This will eventually be changed to an API call to get all of the pools.. For now hard coded :(
         {
@@ -23,7 +24,8 @@ namespace SafeMiner.Models
                     Name = "Equipool USA",
                     fee = "0.2%",
                     port = "50111",
-                    uri = "mine.equipool.1ds.us"
+                    uri = "mine.equipool.1ds.us",
+                    WorkerPage = "https://equipool.1ds.us/workers/|ADDR|"
                 },
                 new MiningPool
                 {

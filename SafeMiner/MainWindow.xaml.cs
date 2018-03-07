@@ -37,6 +37,7 @@ namespace SafeMiner
         public MainWindow()
         {
             InitializeComponent();
+            ViewWorkerTextBlock.Visibility = Visibility.Collapsed;
             wnd = this;
             //Initialize all the of the lists.
             pools = new List<MiningPool>();
@@ -80,6 +81,8 @@ namespace SafeMiner
                     procs.Add(StartClaymore());
 
                 MiningButton.Content = "Stop Mining!";
+                ViewWorkerTextBlock.Visibility = Visibility.Visible;
+                ViewWorkerHyperLink.NavigateUri = new Uri(pools[SelectPoolComboBox.SelectedIndex].WorkerPage.Replace("|ADDR|",walletAddressTextBox.Text));
                 mining = true;
             }
             else
@@ -96,7 +99,8 @@ namespace SafeMiner
                     }
                 }
                 MiningButton.Content = "Start Mining!";
-                
+                ViewWorkerTextBlock.Visibility = Visibility.Collapsed;
+
 
                 mining = false;
             }
@@ -133,7 +137,7 @@ namespace SafeMiner
             proc.StartInfo.Arguments = "--list-devices";
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.StartInfo.CreateNoWindow = true;
             proc.Start();
             var output = proc.StandardOutput.ReadToEnd().Split(':').ToList().Where(x => x.ToUpper().Contains("GEFORCE") || x.ToUpper().Contains("AMD"))
                 .Select(x => x.Substring(0, x.IndexOf("\r")).ToUpper().Trim()).ToList();

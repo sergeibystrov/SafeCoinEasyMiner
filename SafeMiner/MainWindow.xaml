@@ -28,5 +28,10 @@
             </Hyperlink>
         </TextBlock>
         <TextBlock HorizontalAlignment="Left" Margin="512,75,0,0" TextWrapping="Wrap" Text="Tip: Always pick the pool with the lowest ping and lowest fees!" VerticalAlignment="Top"/>
+        <TextBlock x:Name="ViewWorkerTextBlock" HorizontalAlignment="Left" Margin="581,341,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top">
+            <Hyperlink x:Name="ViewWorkerHyperLink" NavigateUri="http://safecoin.org/wallets/" RequestNavigate="Hyperlink_RequestNavigate">
+                View Worker
+            </Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>
