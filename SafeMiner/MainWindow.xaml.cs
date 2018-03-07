@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using SafeMiner.Models;
-using SafeMiner.Enumerations;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
@@ -25,59 +24,103 @@ namespace SafeMiner
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<MiningPools> pools;
+        public static Window wnd;
+        List<MiningPool> pools;
         List<Process> procs;
+        List<GraphicsCard> AmdGPUs;
+        List<GraphicsCard> NvidiaGPUs;
         public ObservableCollection<ComboBoxItem> cbItems { get; set; }
         public ComboBoxItem SelectedcbItem { get; set; }
+        bool mining = false;
+
         public MainWindow()
         {
             InitializeComponent();
-            pools = new List<MiningPools>();
+            wnd = this;
+            //Initialize all the of the lists.
+            pools = new List<MiningPool>();
             procs = new List<Process>();
-            getPools();
+            AmdGPUs = new List<GraphicsCard>();
+            NvidiaGPUs = new List<GraphicsCard>();
+            pools = MiningPool.Get();
+            interrogateCards();
 
+            //Load the Drop Down Menu.
             cbItems = new ObservableCollection<ComboBoxItem>();
             foreach( var p in pools.OrderBy(x => x.ID))
                 cbItems.Add(new ComboBoxItem { Content = p.Name + " - DEV FEE: " + p.fee });
             SelectPoolComboBox.ItemsSource = cbItems;
-            if (!File.Exists(Directory.GetCurrentDirectory() + "\\settings.txt"))
+
+            //Get the users default settings.
+            walletAddressTextBox.Text = Properties.Settings.Default.WalletAddress;
+            SelectPoolComboBox.SelectedIndex = Properties.Settings.Default.PoolSelection;
+        }
+
+        //On click start mining.
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (!mining)
             {
-                File.Create(Directory.GetCurrentDirectory() + "\\settings.txt");
+                //Save the wallet and pool info into settings
+                Properties.Settings.Default.WalletAddress = walletAddressTextBox.Text;
+                Properties.Settings.Default.PoolSelection = SelectPoolComboBox.SelectedIndex;
+                Properties.Settings.Default.Save();
+
+                //Start DSTM
+                if (NvidiaGPUs != null && NvidiaGPUs.Count > 0)
+                    procs.Add(StartDSTM());
+                //Start Claymore
+                if (AmdGPUs != null && AmdGPUs.Count > 0)
+                    procs.Add(StartClaymore());
+
+                MiningButton.Content = "Stop Mining!";
+                mining = true;
             }
             else
             {
-                StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + "\\settings.txt");
-                string line = sr.ReadLine();
-                sr.Close();
-                if (!string.IsNullOrWhiteSpace(line))
+                foreach (var p in procs)
                 {
-                    walletAddressTextBox.Text = line.Split(' ')[0];
-                    SelectPoolComboBox.SelectedIndex = int.Parse(line.Split(' ')[1]);
+                    try//Try to kill
+                    {
+                        p.Kill();
+                    }
+                    catch//If error assume process has been killed & keep going.
+                    {
+                        continue;
+                    }
+                }
+                MiningButton.Content = "Start Mining!";
+                
+
+                mining = false;
+            }
+        }
+
+        //On window closing exit the mining programs.
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            foreach (var p in procs)
+            {
+                try//Try to kill
+                {
+                    p.Kill();
+                }
+                catch//If error assume process has been killed & keep going.
+                {
+                    continue;
                 }
             }
-
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        //Go get a wallet from safecoin.org
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            File.WriteAllText(Directory.GetCurrentDirectory() + "\\settings.txt", String.Empty);
-            StreamWriter sw = new StreamWriter(Directory.GetCurrentDirectory() + "\\settings.txt");
-            sw.WriteLine(walletAddressTextBox.Text + " " + SelectPoolComboBox.SelectedIndex.ToString());
-            sw.Close();
-
-            var cards = interrogateCards();
-
-            var pDSTM = StartDSTM(cards.Where(x => x.Type == GraphicsCardType.NVidia_New).Select(x => x).ToList());
-            var pClaymore = StartClaymore(cards.Where(x => x.Type == GraphicsCardType.AMD).Select(x => x).ToList());
-
-            if (pDSTM != null)
-                procs.Add(pDSTM);
-            if (pClaymore != null)
-                procs.Add(pClaymore);
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
-        
 
-        private List<GraphicsCard> interrogateCards()
+
+        //Get what cards the system has installed.
+        private void interrogateCards()
         {
             var proc = new Process();
             proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\Optiminer\\Optiminer.exe");
@@ -93,90 +136,81 @@ namespace SafeMiner
             var exitCode = proc.ExitCode;
             proc.Close();
             
-            List<GraphicsCard> cards = new List<GraphicsCard>();
-
             for(var i = 0; i < output.Count; i++)
             {
-                cards.Add(new GraphicsCard
-                {
-                    CardName = output[i],
-                    CardNumber = i,
-                    Type = output[i].Contains("GTX") ? GraphicsCardType.NVidia_New : GraphicsCardType.AMD
-                });
+                if (output[i].Contains("GTX"))
+                    NvidiaGPUs.Add(new GraphicsCard
+                    {
+                        Index = i,
+                        CardName = output[i]
+                    });
+                else
+                    AmdGPUs.Add(new GraphicsCard
+                    {
+                        Index = i,
+                        CardName = output[i]
+                    });
             }
-
-            return cards;
+            
         }
 
-        private Process StartDSTM(List<GraphicsCard> Cards)
+        private Process StartDSTM()//DSTM is for the Nvidia Cards
         {
-            if (Cards == null || Cards.Count == 0)
-                return null;
             var pool = pools[SelectPoolComboBox.SelectedIndex];
 
-            var cardNumbers = "";
-            foreach (var c in Cards)
-                cardNumbers = c.CardNumber.ToString() + ",";
-            cardNumbers = cardNumbers.Remove(cardNumbers.Length - 1);
+            var CardIndexes = "";
+            foreach (var c in NvidiaGPUs)
+                CardIndexes = c.Index.ToString() + ",";
+            CardIndexes = CardIndexes.Remove(CardIndexes.Length - 1);
 
             var proc = new Process();
             proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\zm_0.6_win\\zm.exe");
-            proc.StartInfo.Arguments = "zm --server " + pool.uri + " --port " + pool.port + " --user "+walletAddressTextBox.Text+".EasyMiner --pass x --dev " + cardNumbers +
-                " > "+ Directory.GetCurrentDirectory()+"\\DSTMLog.txt";
+            proc.StartInfo.Arguments = "zm --server " + pool.uri + " --port " + pool.port + " --user " + 
+                walletAddressTextBox.Text + ".EasyMiner --pass x --dev " + CardIndexes; ;
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = false;
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.CreateNoWindow = true;
+            proc.OutputDataReceived += new DataReceivedEventHandler(MyProcOutputHandler);
             proc.Start();
+            proc.BeginOutputReadLine();
             return proc;
         }
-        private Process StartClaymore(List<GraphicsCard> Cards)
+        private Process StartClaymore()//Claymore is for the AMD cards
         {
-            if (Cards == null || Cards.Count == 0)
-                return null;
             var pool = pools[SelectPoolComboBox.SelectedIndex];
-            var cardNumbers = "";
-            foreach (var c in Cards)
-                cardNumbers = c.CardNumber.ToString() + ",";
-            cardNumbers = cardNumbers.Remove(cardNumbers.Length - 1);
+            var CardIndexes = "";
+            foreach (var c in AmdGPUs)
+                CardIndexes = c.Index.ToString() + ",";
+            CardIndexes = CardIndexes.Remove(CardIndexes.Length - 1);
             
             var proc = new Process();
             proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\claymore_amd_v12.6\\ZecMiner64.exe");
-            proc.StartInfo.Arguments = "ZecMiner64.exe -zpool stratum+tcp://" + pool.uri + ":" + pool.port + " -zwal " + walletAddressTextBox.Text + ".EasyMiner -zpsw x -di " + cardNumbers;
+            proc.StartInfo.Arguments = "ZecMiner64.exe -zpool stratum+tcp://" + pool.uri + ":" + pool.port + 
+                " -zwal " + walletAddressTextBox.Text + ".EasyMiner -zpsw x -di " + CardIndexes;
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = false;
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.CreateNoWindow = true;
+            proc.OutputDataReceived += new DataReceivedEventHandler(MyProcOutputHandler);
             proc.Start();
+            proc.BeginOutputReadLine();
             return proc;
         }
-
-
-        private List<MiningPools> getPools()
+        private static List<string> myList = new List<string>();
+        private static void MyProcOutputHandler(object sendingProcess,
+            DataReceivedEventArgs outLine)
         {
-            
-            pools.Add(new MiningPools
+            // Collect the sort command output. 
+            if (!String.IsNullOrEmpty(outLine.Data))
             {
-                ID = 0,
-                Name = "Equipool USA",
-                fee = "0.2%",
-                port = "50111",
-                uri = "mine.equipool.1ds.us"
-            });
-            pools.Add(new MiningPools
-            {
-                ID = 1,
-                Name = "Cats Pool EU",
-                fee = "0.5%",
-                port = "3432",
-                uri = "safecoin.catspool.org"
-            });
-
-            return pools;
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            foreach (var p in procs)
-                p.Kill();
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    MainWindow my = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+                    myList.Add("[" + DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss tt") + "]   " + outLine.Data);
+                    if (myList.Count > 14)
+                        myList.RemoveAt(0);
+                    my.ConsoleOutRichTextBox.Text = string.Join("\n",myList.ToArray());
+                }));
+            }
         }
     }
 }

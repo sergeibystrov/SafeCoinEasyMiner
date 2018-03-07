@@ -5,43 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SafeMiner"
         mc:Ignorable="d"
-        Title="SafeCoin Easy Miner" Height="170
-        " Width="525" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="Images/logo_sm.png" Closing="Window_Closing">
+        Title="SafeCoin Easy Miner" Height="400
+        " Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="Images/logo_sm.png" Closing="Window_Closing">
     <Grid>
         <Label x:Name="walletLabel" Content="Wallet Address:" Margin="8,46,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
         <TextBox x:Name="walletAddressTextBox" HorizontalAlignment="Left" Height="23"  TextWrapping="NoWrap" Margin="118,46,0,0" Text="" VerticalAlignment="Top" Width="389"/>
         <Label x:Name="poolLabel" Content="Select Pool:" Margin="8,81,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <ComboBox x:Name="SelectPoolComboBox" ItemsSource="{Binding cbItems}" HorizontalAlignment="Left" Margin="118,81,0,0" VerticalAlignment="Top" Width="389" SelectedValuePath="Content">
         </ComboBox>
-        <Button Content="Start Mining!" HorizontalAlignment="Left" Margin="418,108,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click"/>
+        <Button x:Name="MiningButton" Content="Start Mining!" HorizontalAlignment="Left" Margin="693,341,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click"/>
         <Image HorizontalAlignment="Left" Height="31" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="Images/logo.png"/>
-        <TabControl HorizontalAlignment="Left" Height="197" Margin="20,307,0,0" VerticalAlignment="Top" Width="499">
-            <TabItem x:Name="DSTMTabItem" Header="DSTM">
-                <Grid Background="#FFE5E5E5">
-                    <RichTextBox x:Name="DSTMRtb" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="493">
-                        <FlowDocument>
-                            <Paragraph>
-                                <Run Text="RichTextBox"/>
-                            </Paragraph>
-                        </FlowDocument>
-                    </RichTextBox>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="ClaymoreTabItem" Header="Claymore">
-                <Grid Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="486*"/>
-                    </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="ClaymoreRtb" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="493" Grid.ColumnSpan="2">
-                        <FlowDocument>
-                            <Paragraph>
-                                <Run Text="RichTextBox"/>
-                            </Paragraph>
-                        </FlowDocument>
-                    </RichTextBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        <RichTextBox HorizontalAlignment="Left" Height="224" Margin="10,112,0,0" VerticalAlignment="Top" Width="774">
+            <FlowDocument>
+                <Paragraph>
+                    <Run x:Name="ConsoleOutRichTextBox" Text=""/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <TextBlock HorizontalAlignment="Left" Margin="512,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+            <Hyperlink NavigateUri="http://safecoin.org/wallets/" RequestNavigate="Hyperlink_RequestNavigate">
+                Dont have an address? Get one!
+            </Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>
