@@ -28,10 +28,58 @@ namespace SafeMiner.Models
                 new MiningPool
                 {
                     ID = 1,
+                    Name = "Minadores Pool",
+                    fee = "0.2%",
+                    port = "3032",
+                    uri = "equi.minadorespool.gq"
+                },
+                new MiningPool
+                {
+                    ID = 2,
                     Name = "Cats Pool EU",
                     fee = "0.5%",
                     port = "3432",
                     uri = "safecoin.catspool.org"
+                },
+                new MiningPool
+                {
+                    ID = 3,
+                    Name = "Cats Pool USA",
+                    fee = "0.5%",
+                    port = "3432",
+                    uri = "safecoin-us.catspool.org"
+                },
+                new MiningPool
+                {
+                    ID = 4,
+                    Name = "Sexy Pool",
+                    fee = "0.5%",
+                    port = "21002",
+                    uri = "safe.pool.sexy"
+                },
+                new MiningPool
+                {
+                    ID = 5,
+                    Name = "PcMining XYZ EU",
+                    fee = "1%!!",
+                    port = "3457",
+                    uri = "pcmining.xyz"
+                },
+                new MiningPool
+                {
+                    ID = 6,
+                    Name = "PcMining XYZ USA",
+                    fee = "1%!!",
+                    port = "3457",
+                    uri = "us.pcmining.xyz"
+                },
+                new MiningPool
+                {
+                    ID = 7,
+                    Name = "PcMining XYZ Asia",
+                    fee = "1%!!",
+                    port = "3457",
+                    uri = "asia.pcmining.xyz"
                 }
             };
 

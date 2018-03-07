@@ -22,10 +22,11 @@
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <TextBlock HorizontalAlignment="Left" Margin="512,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+        <TextBlock HorizontalAlignment="Left" Margin="512,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
             <Hyperlink NavigateUri="http://safecoin.org/wallets/" RequestNavigate="Hyperlink_RequestNavigate">
                 Dont have an address? Get one!
             </Hyperlink>
         </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="512,75,0,0" TextWrapping="Wrap" Text="Tip: Always pick the pool with the lowest ping and lowest fees!" VerticalAlignment="Top"/>
     </Grid>
 </Window>

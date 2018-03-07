@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="WalletAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">RdKCaxUxSFXCdmcm5T9YqvPiJuWL8UHF1U</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PoolSelection" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

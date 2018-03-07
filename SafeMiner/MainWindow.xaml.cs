@@ -16,6 +16,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Net.NetworkInformation;
 
 namespace SafeMiner
 {
@@ -47,8 +48,13 @@ namespace SafeMiner
 
             //Load the Drop Down Menu.
             cbItems = new ObservableCollection<ComboBoxItem>();
-            foreach( var p in pools.OrderBy(x => x.ID))
-                cbItems.Add(new ComboBoxItem { Content = p.Name + " - DEV FEE: " + p.fee });
+            foreach (var p in pools.OrderBy(x => x.ID))
+            {
+                Ping myPing = new Ping();
+                PingReply reply = myPing.Send(p.uri, 1000);
+                if(reply.Status != IPStatus.TimedOut)
+                    cbItems.Add(new ComboBoxItem { Content = p.Name + ", Ping: " + reply.RoundtripTime + ", Pool Fee: " + p.fee });
+            }
             SelectPoolComboBox.ItemsSource = cbItems;
 
             //Get the users default settings.
