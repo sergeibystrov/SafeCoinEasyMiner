@@ -25,7 +25,7 @@ namespace SafeMiner.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("RdKCaxUxSFXCdmcm5T9YqvPiJuWL8UHF1U")]
         public string WalletAddress {
             get {
                 return ((string)(this["WalletAddress"]));
