@@ -42,19 +42,14 @@ namespace SafeMiner
             //Initialize all the of the lists.
             pools = new List<MiningPool>();
             procs = new List<Process>();
-            AmdGPUs = new List<GraphicsCard>();
             NvidiaGPUs = new List<GraphicsCard>();
             pools = MiningPool.Get();
-            interrogateCards();
 
             //Load the Drop Down Menu.
             cbItems = new ObservableCollection<ComboBoxItem>();
             foreach (var p in pools.OrderBy(x => x.ID))
             {
-                Ping myPing = new Ping();
-                PingReply reply = myPing.Send(p.uri, 1000);
-                if(reply.Status != IPStatus.TimedOut)
-                    cbItems.Add(new ComboBoxItem { Content = p.Name + ", Ping: " + reply.RoundtripTime + ", Pool Fee: " + p.fee });
+                cbItems.Add(new ComboBoxItem { Content = p.Name });
             }
             SelectPoolComboBox.ItemsSource = cbItems;
 
@@ -75,10 +70,7 @@ namespace SafeMiner
 
                 //Start DSTM
                 if (NvidiaGPUs != null && NvidiaGPUs.Count > 0)
-                    procs.Add(StartDSTM());
-                //Start Claymore
-                if (AmdGPUs != null && AmdGPUs.Count > 0)
-                    procs.Add(StartClaymore());
+                    procs.Add(StartEWBF());
 
                 MiningButton.Content = "Stop Mining!";
                 ViewWorkerTextBlock.Visibility = Visibility.Visible;
@@ -127,76 +119,15 @@ namespace SafeMiner
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
-
-
-        //Get what cards the system has installed.
-        private void interrogateCards()
-        {
-            var proc = new Process();
-            proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\Optiminer\\Optiminer.exe");
-            proc.StartInfo.Arguments = "--list-devices";
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.Start();
-            var output = proc.StandardOutput.ReadToEnd().Split(':').ToList().Where(x => x.ToUpper().Contains("GEFORCE") || x.ToUpper().Contains("AMD"))
-                .Select(x => x.Substring(0, x.IndexOf("\r")).ToUpper().Trim()).ToList();
-
-            proc.WaitForExit();
-            var exitCode = proc.ExitCode;
-            proc.Close();
-            
-            for(var i = 0; i < output.Count; i++)
-            {
-                if (output[i].Contains("GTX"))
-                    NvidiaGPUs.Add(new GraphicsCard
-                    {
-                        Index = i,
-                        CardName = output[i]
-                    });
-                else
-                    AmdGPUs.Add(new GraphicsCard
-                    {
-                        Index = i,
-                        CardName = output[i]
-                    });
-            }
-            
-        }
-
-        private Process StartDSTM()//DSTM is for the Nvidia Cards
+        
+        private Process StartEWBF()
         {
             var pool = pools[SelectPoolComboBox.SelectedIndex];
-
-            var CardIndexes = "";
-            foreach (var c in NvidiaGPUs)
-                CardIndexes = c.Index.ToString() + ",";
-            CardIndexes = CardIndexes.Remove(CardIndexes.Length - 1);
-
-            var proc = new Process();
-            proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\zm_0.6_win\\zm.exe");
-            proc.StartInfo.Arguments = "zm --server " + pool.uri + " --port " + pool.port + " --user " + 
-                walletAddressTextBox.Text + ".EasyMiner --pass x --dev " + CardIndexes; ;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.OutputDataReceived += new DataReceivedEventHandler(MyProcOutputHandler);
-            proc.Start();
-            proc.BeginOutputReadLine();
-            return proc;
-        }
-        private Process StartClaymore()//Claymore is for the AMD cards
-        {
-            var pool = pools[SelectPoolComboBox.SelectedIndex];
-            var CardIndexes = "";
-            foreach (var c in AmdGPUs)
-                CardIndexes = c.Index.ToString() + ",";
-            CardIndexes = CardIndexes.Remove(CardIndexes.Length - 1);
             
             var proc = new Process();
-            proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\claymore_amd_v12.6\\ZecMiner64.exe");
-            proc.StartInfo.Arguments = "ZecMiner64.exe -zpool stratum+tcp://" + pool.uri + ":" + pool.port + 
-                " -zwal " + walletAddressTextBox.Text + ".EasyMiner -zpsw x -di " + CardIndexes;
+            proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\EWBF\\miner.exe");
+            proc.StartInfo.Arguments = "miner --server " + pool.uri + " --port " + pool.port + " --user " +
+                walletAddressTextBox.Text + ".EasyMiner --pass x --algo 144_5 --pers Safecoin";
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.CreateNoWindow = true;
