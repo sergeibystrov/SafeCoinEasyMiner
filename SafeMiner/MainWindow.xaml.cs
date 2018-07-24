@@ -28,8 +28,6 @@ namespace SafeMiner
         public static Window wnd;
         List<MiningPool> pools;
         List<Process> procs;
-        List<GraphicsCard> AmdGPUs;
-        List<GraphicsCard> NvidiaGPUs;
         public ObservableCollection<ComboBoxItem> cbItems { get; set; }
         public ComboBoxItem SelectedcbItem { get; set; }
         bool mining = false;
@@ -42,7 +40,6 @@ namespace SafeMiner
             //Initialize all the of the lists.
             pools = new List<MiningPool>();
             procs = new List<Process>();
-            NvidiaGPUs = new List<GraphicsCard>();
             pools = MiningPool.Get();
 
             //Load the Drop Down Menu.
@@ -68,9 +65,8 @@ namespace SafeMiner
                 Properties.Settings.Default.PoolSelection = SelectPoolComboBox.SelectedIndex;
                 Properties.Settings.Default.Save();
 
-                //Start DSTM
-                if (NvidiaGPUs != null && NvidiaGPUs.Count > 0)
-                    procs.Add(StartEWBF());
+                //Start EWBF
+                procs.Add(StartEWBF());
 
                 MiningButton.Content = "Stop Mining!";
                 ViewWorkerTextBlock.Visibility = Visibility.Visible;
@@ -129,29 +125,29 @@ namespace SafeMiner
             proc.StartInfo.Arguments = "miner --server " + pool.uri + " --port " + pool.port + " --user " +
                 walletAddressTextBox.Text + ".EasyMiner --pass x --algo 144_5 --pers Safecoin";
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.OutputDataReceived += new DataReceivedEventHandler(MyProcOutputHandler);
+            //proc.StartInfo.RedirectStandardOutput = true;
+            //proc.StartInfo.CreateNoWindow = true;
+            //proc.OutputDataReceived += new DataReceivedEventHandler(MyProcOutputHandler);
             proc.Start();
-            proc.BeginOutputReadLine();
+           // proc.BeginOutputReadLine();
             return proc;
         }
-        private static List<string> myList = new List<string>();
-        private static void MyProcOutputHandler(object sendingProcess,
-            DataReceivedEventArgs outLine)
-        {
-            // Collect the sort command output. 
-            if (!String.IsNullOrEmpty(outLine.Data))
-            {
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    MainWindow my = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-                    myList.Add("[" + DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss tt") + "]   " + outLine.Data);
-                    if (myList.Count > 14)
-                        myList.RemoveAt(0);
-                    my.ConsoleOutRichTextBox.Text = string.Join("\n",myList.ToArray());
-                }));
-            }
-        }
+        //private static List<string> myList = new List<string>();
+        //private static void MyProcOutputHandler(object sendingProcess,
+        //    DataReceivedEventArgs outLine)
+        //{
+        //    // Collect the sort command output. 
+        //    if (!String.IsNullOrEmpty(outLine.Data))
+        //    {
+        //        Application.Current.Dispatcher.Invoke(new Action(() =>
+        //        {
+        //            MainWindow my = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+        //            myList.Add("[" + DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss tt") + "]   " + outLine.Data);
+        //            if (myList.Count > 14)
+        //                myList.RemoveAt(0);
+        //            my.ConsoleOutRichTextBox.Text = string.Join("\n",myList.ToArray());
+        //        }));
+        //    }
+        //}
     }
 }
