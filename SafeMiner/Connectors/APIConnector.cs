@@ -23,7 +23,7 @@ namespace SafeMiner.Connectors
 
         }
 
-        public List<PoolsByRegion> Get()
+        public List<Pool> Get()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace SafeMiner.Connectors
                 var request = new RestRequest(Method.GET);
 
                 var result = client.Execute(request);
-                var x = Newtonsoft.Json.JsonConvert.DeserializeObject<PoolsByRegion>(result.Content);
+                var x = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Pool>>(result.Content);
                 return null;
             }
             catch

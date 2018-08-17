@@ -1,61 +1,54 @@
 {
-  "PoolsByRegion": [
+
+  "Pool": [
     {
       "Region": "Asia",
-      "Pools": [
-        {
-          "Name": "PcMining XYZ",
-          "port": "3457",
-          "uri": "asia.pcmining.xyz",
-          "WorkerPage": ""
-        }
-      ]
+      "Name": "PcMining XYZ",
+      "port": "3457",
+      "uri": "asia.pcmining.xyz",
+      "WorkerPage": ""
     },
     {
       "Region": "Europe",
-      "Pools": [
-        {
-          "Name": "Cats Pool",
-          "port": "3432",
-          "uri": "safecoin.catspool.org",
-          "WorkerPage": ""
-        },
-        {
-          "Name": "Sexy Pool",
-          "port": "21002",
-          "uri": "safe.pool.sexy",
-          "WorkerPage": ""
-        },
-        {
-          "Name": "PcMining XYZ",
-          "port": "3457",
-          "uri": "pcmining.xyz",
-          "WorkerPage": ""
-        }
-      ]
+      "Name": "Cats Pool",
+      "port": "3432",
+      "uri": "safecoin.catspool.org",
+      "WorkerPage": ""
+    },
+    {
+      "Region": "Europe",
+      "Name": "Sexy Pool",
+      "port": "21002",
+      "uri": "safe.pool.sexy",
+      "WorkerPage": ""
+    },
+    {
+      "Region": "Europe",
+      "Name": "PcMining XYZ",
+      "port": "3457",
+      "uri": "pcmining.xyz",
+      "WorkerPage": ""
     },
     {
       "Region": "USA",
-      "Pools": [
-        {
-          "Name": "Equipool",
-          "port": "50111",
-          "uri": "mine.equipool.1ds.us",
-          "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
-        },
-        {
-          "Name": "Cats Pool",
-          "port": "3432",
-          "uri": "safecoin-us.catspool.org",
-          "WorkerPage": ""
-        },
-        {
-          "Name": "PcMining XYZ",
-          "port": "3457",
-          "uri": "us.pcmining.xyz",
-          "WorkerPage": ""
-        }
-      ]
+      "Name": "Equipool",
+      "port": "50111",
+      "uri": "mine.equipool.1ds.us",
+      "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+    },
+    {
+      "Region": "USA",
+      "Name": "Cats Pool",
+      "port": "3432",
+      "uri": "safecoin-us.catspool.org",
+      "WorkerPage": ""
+    },
+    {
+      "Region": "USA",
+      "Name": "PcMining XYZ",
+      "port": "3457",
+      "uri": "us.pcmining.xyz",
+      "WorkerPage": ""
     }
   ]
 }

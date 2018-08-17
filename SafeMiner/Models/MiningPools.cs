@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace SafeMiner.Models
 {
-    public class PoolsByRegion
-    {
-        public string Region { get; set; }
-        public List<Pool> Pools { get; set; }
-    }
     public class Pool
     {
+        public string Region { get; set; }
         public string Name { get; set; }
         public string uri { get; set; }
         public string port { get; set; }

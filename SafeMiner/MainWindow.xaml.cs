@@ -28,7 +28,7 @@ namespace SafeMiner
     public partial class MainWindow : Window
     {
         public static Window wnd;
-        List<PoolsByRegion> pools;
+        List<Pool> pools;
         Pool SelectedPool;
         List<Process> procs= new List<Process>();
         public ObservableCollection<ComboBoxItem> cbItems { get; set; }
