@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SafeMiner.Models
 {
-    public class PoolByCountry
+    public class PoolsByRegion
     {
         public string Region { get; set; }
         public List<Pool> Pools { get; set; }
