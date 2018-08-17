@@ -2,7 +2,7 @@
   "PoolByCountry": 
     [
       {
-        "CountryName": "Asia",
+        "Region": "Asia",
         "Pools": [
           {
             "Name": "PcMining XYZ",
@@ -13,7 +13,7 @@
         ]
       },
       {
-        "CountryName": "Europe",
+        "Region": "Europe",
         "Pools": [
           {
             "Name": "Cats Pool",
@@ -36,7 +36,7 @@
         ]
       },
       {
-        "CountryName": "USA",
+        "Region": "USA",
         "Pools": [
           {
             "Name": "Equipool",
