@@ -8,7 +8,7 @@ namespace SafeMiner.Models
 {
     public class PoolByCountry
     {
-        public string CountryName { get; set; }
+        public string Region { get; set; }
         public List<Pool> Pools { get; set; }
     }
     public class Pool
