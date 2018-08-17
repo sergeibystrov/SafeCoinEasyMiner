@@ -6,8 +6,8 @@
         {
           "Name": "PcMining XYZ",
           "port": "3457",
-          "uri": "asia.pcmining.xyz"
-          //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          "uri": "asia.pcmining.xyz",
+          "WorkerPage": ""
         }
       ]
     },
@@ -17,20 +17,20 @@
         {
           "Name": "Cats Pool",
           "port": "3432",
-          "uri": "safecoin.catspool.org"
-          //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          "uri": "safecoin.catspool.org",
+          "WorkerPage": ""
         },
         {
           "Name": "Sexy Pool",
           "port": "21002",
-          "uri": "safe.pool.sexy"
-          //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          "uri": "safe.pool.sexy",
+          "WorkerPage": ""
         },
         {
           "Name": "PcMining XYZ",
           "port": "3457",
-          "uri": "pcmining.xyz"
-          //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          "uri": "pcmining.xyz",
+          "WorkerPage": ""
         }
       ]
     },
@@ -46,14 +46,14 @@
         {
           "Name": "Cats Pool",
           "port": "3432",
-          "uri": "safecoin-us.catspool.org"
-          //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          "uri": "safecoin-us.catspool.org",
+          "WorkerPage": ""
         },
         {
           "Name": "PcMining XYZ",
           "port": "3457",
-          "uri": "us.pcmining.xyz"
-          //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          "uri": "us.pcmining.xyz",
+          "WorkerPage": ""
         }
       ]
     }
