@@ -1,51 +1,62 @@
 {
   "Pools": {
-    "Asia": [
+    [
       {
-        "Name": "PcMining XYZ",
-        "port": "3457",
-        "uri": "asia.pcmining.xyz"
-        //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
-      }
-    ],
-    "Europe": [
-      {
-        "Name": "Cats Pool",
-        "port": "3432",
-        "uri": "safecoin.catspool.org"
-        //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+        "CountryName": "Asia",
+        "Pools": [
+          {
+            "Name": "PcMining XYZ",
+            "port": "3457",
+            "uri": "asia.pcmining.xyz"
+            //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          }
+        ]
       },
       {
-        "Name": "Sexy Pool",
-        "port": "21002",
-        "uri": "safe.pool.sexy"
-        //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+        "CountryName": "Europe",
+        "Pools": [
+          {
+            "Name": "Cats Pool",
+            "port": "3432",
+            "uri": "safecoin.catspool.org"
+            //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          },
+          {
+            "Name": "Sexy Pool",
+            "port": "21002",
+            "uri": "safe.pool.sexy"
+            //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          },
+          {
+            "Name": "PcMining XYZ",
+            "port": "3457",
+            "uri": "pcmining.xyz"
+            //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          }
+        ]
       },
       {
-        "Name": "PcMining XYZ",
-        "port": "3457",
-        "uri": "pcmining.xyz"
-        //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
-      }
-    ],
-    "USA": [
-      {
-        "Name": "Equipool",
-        "port": "50111",
-        "uri": "mine.equipool.1ds.us",
-        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
-      },
-      {
-        "Name": "Cats Pool",
-        "port": "3432",
-        "uri": "safecoin-us.catspool.org"
-        //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
-      },
-      {
-        "Name": "PcMining XYZ",
-        "port": "3457",
-        "uri": "us.pcmining.xyz"
-        //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+        "CountryName": "USA",
+        "Pools": [
+          {
+            "Name": "Equipool",
+            "port": "50111",
+            "uri": "mine.equipool.1ds.us",
+            "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          },
+          {
+            "Name": "Cats Pool",
+            "port": "3432",
+            "uri": "safecoin-us.catspool.org"
+            //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          },
+          {
+            "Name": "PcMining XYZ",
+            "port": "3457",
+            "uri": "us.pcmining.xyz"
+            //        "WorkerPage": "https://equipool.1ds.us/workers/|ADDR|"
+          }
+        ]
       }
     ]
   }

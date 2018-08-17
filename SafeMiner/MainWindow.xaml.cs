@@ -17,6 +17,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Net.NetworkInformation;
+using SafeMiner.Connectors.Interfaces;
+using SafeMiner.Connectors;
 
 namespace SafeMiner
 {
@@ -26,29 +28,30 @@ namespace SafeMiner
     public partial class MainWindow : Window
     {
         public static Window wnd;
-        List<MiningPool> pools;
-        List<Process> procs;
+        List<PoolByCountry> pools;
+        Pool SelectedPool;
+        List<Process> procs= new List<Process>();
         public ObservableCollection<ComboBoxItem> cbItems { get; set; }
         public ComboBoxItem SelectedcbItem { get; set; }
         bool mining = false;
+        APIConnector api = new APIConnector();
 
         public MainWindow()
         {
             InitializeComponent();
             ViewWorkerTextBlock.Visibility = Visibility.Collapsed;
             wnd = this;
-            //Initialize all the of the lists.
-            pools = new List<MiningPool>();
-            procs = new List<Process>();
-            pools = MiningPool.Get();
+
+            
+            pools = api.Get();
 
             //Load the Drop Down Menu.
             cbItems = new ObservableCollection<ComboBoxItem>();
-            foreach (var p in pools.OrderBy(x => x.ID))
-            {
-                cbItems.Add(new ComboBoxItem { Content = p.Name });
-            }
-            SelectPoolComboBox.ItemsSource = cbItems;
+            //foreach (var p in pools.OrderBy(x => x.ID))
+            //{
+            //    cbItems.Add(new ComboBoxItem { Content = p.Name });
+            //}
+            //SelectPoolComboBox.ItemsSource = cbItems;
 
             //Get the users default settings.
             walletAddressTextBox.Text = Properties.Settings.Default.WalletAddress;
@@ -70,7 +73,7 @@ namespace SafeMiner
 
                 MiningButton.Content = "Stop Mining!";
                 ViewWorkerTextBlock.Visibility = Visibility.Visible;
-                ViewWorkerHyperLink.NavigateUri = new Uri(pools[SelectPoolComboBox.SelectedIndex].WorkerPage.Replace("|ADDR|",walletAddressTextBox.Text));
+                //ViewWorkerHyperLink.NavigateUri = new Uri(pools[SelectPoolComboBox.SelectedIndex].WorkerPage.Replace("|ADDR|",walletAddressTextBox.Text));
                 mining = true;
             }
             else
@@ -122,8 +125,9 @@ namespace SafeMiner
             
             var proc = new Process();
             proc.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Miners\\EWBF\\miner.exe");
-            proc.StartInfo.Arguments = "miner --server " + pool.uri + " --port " + pool.port + " --user " +
-                walletAddressTextBox.Text + ".EasyMiner --pass x --algo 144_5 --pers Safecoin";
+            //TODO:
+  //          proc.StartInfo.Arguments = "miner --server " + pool.uri + " --port " + pool.port + " --user " +
+  //              walletAddressTextBox.Text + ".EasyMiner --pass x --algo 144_5 --pers Safecoin";
             proc.StartInfo.UseShellExecute = false;
             //proc.StartInfo.RedirectStandardOutput = true;
             //proc.StartInfo.CreateNoWindow = true;
